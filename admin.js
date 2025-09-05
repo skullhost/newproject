@@ -1,5 +1,5 @@
 // admin.js
-const SUPABASE_URL = "https://YOUR_PROJECT.supabase.co";    // <-- ganti
+const SUPABASE_URL = "https://zvqlsgwccrdqjgcxgmzq.supabase.co";    // <-- ganti
 const SUPABASE_ANON_KEY = "YOUR_ANON_KEY";                 // <-- ganti
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
