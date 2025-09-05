@@ -1,69 +1,56 @@
-const supabase = supabase.createClient('https://zvqlsgwccrdqjgcxgmzq.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp2cWxzZ3djY3JkcWpnY3hnbXpxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcwNTc0MDUsImV4cCI6MjA3MjYzMzQwNX0.6Ge1ON_x9Ce-l4tFRtH_Ks9o3v1RouLIDejtbohjo4Y');
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin — STORESKULLHOST</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script defer src="admin.js"></script>
+</head>
+<body>
+  <header class="navbar container">
+    <div class="brand">STORESKULLHOST — Admin</div>
+    <nav><a href="index.html">Lihat Store</a></nav>
+  </header>
 
-async function addProduct() {
-  const name = document.getElementById('prodName').value;
-  const price = parseFloat(document.getElementById('prodPrice').value);
-  const image = document.getElementById('prodImage').value;
-  const description = document.getElementById('prodDesc').value;
+  <main class="container">
+    <section class="section">
+      <h2>Tambah / Edit Produk</h2>
+      <form id="product-form">
+        <input id="p-id" type="hidden">
+        <div class="row">
+          <input id="p-name" class="input" placeholder="Nama produk">
+          <input id="p-price" type="number" class="input" placeholder="Harga">
+        </div>
+        <div class="row" style="margin-top:8px">
+          <input id="p-image" class="input" placeholder="URL gambar (contoh: img/kaos.jpg)">
+          <input id="p-desc" class="input" placeholder="Deskripsi (singkat)">
+        </div>
+        <div style="margin-top:10px">
+          <button type="submit" class="btn primary">Simpan / Tambah</button>
+          <button type="button" id="reset-form" class="btn ghost">Reset</button>
+        </div>
+      </form>
+    </section>
 
-  const { error } = await supabase.from('products').insert({ name, price, image, description });
-  if (error) alert('Gagal tambah produk: ' + error.message);
-  else loadProducts();
-}
+    <section class="section">
+      <h2>Daftar Produk</h2>
+      <table class="table" id="admin-products-table">
+        <thead><tr><th>Gambar</th><th>Nama</th><th>Harga</th><th>Deskripsi</th><th>Aksi</th></tr></thead>
+        <tbody id="admin-products"></tbody>
+      </table>
+    </section>
 
-async function loadProducts() {
-  const { data, error } = await supabase.from('products').select('*');
-  if (error) return console.error(error);
+    <section class="section">
+      <h2>Kelola Pesanan</h2>
+      <table class="table">
+        <thead><tr><th>User</th><th>Phone</th><th>Items</th><th>Status</th><th>Aksi</th></tr></thead>
+        <tbody id="admin-orders"></tbody>
+      </table>
+    </section>
+  </main>
 
-  const tbody = document.querySelector('#product-list tbody');
-  tbody.innerHTML = '';
-  data.forEach(prod => {
-    const row = document.createElement('tr');
-    row.innerHTML = `
-      <td>${prod.name}</td>
-      <td>${prod.price}</td>
-      <td>
-        <button onclick="deleteProduct('${prod.id}')">Hapus</button>
-      </td>
-    `;
-    tbody.appendChild(row);
-  });
-}
-
-async function deleteProduct(id) {
-  const { error } = await supabase.from('products').delete().eq('id', id);
-  if (error) alert('Gagal hapus: ' + error.message);
-  else loadProducts();
-}
-
-async function loadOrders() {
-  const { data, error } = await supabase
-    .from('orders')
-    .select('id, username, phone, status, product(name)');
-  if (error) return console.error(error);
-
-  const tbody = document.querySelector('#order-list tbody');
-  tbody.innerHTML = '';
-  data.forEach(order => {
-    const row = document.createElement('tr');
-    row.innerHTML = `
-      <td>${order.username} (${order.phone})</td>
-      <td>${order.product?.name || '-'}</td>
-      <td>${order.status}</td>
-      <td>
-        <button onclick="updateStatus('${order.id}', 'done')">Done</button>
-        <button onclick="updateStatus('${order.id}', 'canceled')">Batal</button>
-      </td>
-    `;
-    tbody.appendChild(row);
-  });
-}
-
-async function updateStatus(orderId, newStatus) {
-  const { error } = await supabase.from('orders').update({ status: newStatus }).eq('id', orderId);
-  if (error) alert('Gagal update: ' + error.message);
-  else loadOrders();
-}
-
-loadProducts();
-loadOrders();
+  <footer class="footer">&copy; 2025 SKULLHOSTING — STORESKULLHOST</footer>
+</body>
+</html>
