@@ -1,4 +1,4 @@
-const supabaseUrl = "https://YOUR_PROJECT.supabase.co";
+const supabaseUrl = "https://zvqlsgwccrdqjgcxgmzq.supabase.co";
 const supabaseKey = "YOUR_ANON_KEY";
 const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
